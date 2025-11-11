@@ -1,0 +1,264 @@
+﻿let spinnerGrow = `<div class="text-primary text-center">
+                        <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                       </div>
+                        <div>Loading</div>
+                        </div>`;
+
+var loaderSmall = `<div class="d-flex justify-content-center m-1">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                 </div>
+                 </div>`;
+
+function ConnectBtnLoad(userId) {
+    var url = "/UserProfile/FriendConnect/" + userId;
+    $("#" + userId).html(loaderSmall);
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function (data) {
+            $("#" + userId).html(data);
+        }
+    })
+}
+
+function AjaxPost(form, url, id = null) {
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: form.serialize(),
+        success: function (data) {
+            if (id != null) {
+                $("#" + id).html(data);
+            }
+        }
+    });
+}
+
+function Toggle(a) {
+    console.log("#respondRequest " + a);
+    var b = document.getElementById('respondRequest ' + a);
+    $(b).toggle();
+}
+
+function Cancel(userId) {
+    var url = "/UserProfile/CancelRequest";
+    var form = $("#form" + userId);
+    AjaxPost(form, url, userId);
+}
+
+function addFriend(userId, element) {
+    element.innerHTML = loaderSmall;
+
+    // Send friend request
+    var url = "/UserProfile/AddFriend";
+    var form = $("#form" + userId);
+    AjaxPost(form, url, userId);
+
+    // Send push notification to user
+    var url2 = "/UserProfile/Testiranje";
+    var form2 = $("#form" + userId);
+    AjaxPost(form2, url2);
+}
+
+function ConfirmRequest(userId) {
+    var url = "/UserProfile/EstablishConnection";
+    var form = $("#form" + userId);
+    AjaxPost(form, url, userId);
+
+    var url2 = "/UserProfile/Testiranje";
+    var form2 = $("#form" + userId);
+    AjaxPost(form2, url2);
+}
+
+function RespondRequest() {
+    var menu = document.querySelector("#menu");
+    menu.classList.toggle('toggle-display');
+}
+
+function EditPost(id) {
+
+    $.ajax({
+        type: 'GET',
+        url: '/Feed/GetPost/' + id,
+        success: function (data) {
+            let postId = document.getElementById('PostId');
+            let postText = document.getElementById('PostText');
+            let hobbiesCat = document.getElementById('hobbiesCat');
+            let hobbies = document.getElementById('hobbies');
+            postId.value = data.id;
+            postText.value = data.text;
+            hobbiesCat.value = data.hobby.hobbyCategoryId;
+            LoadHobbies(hobbiesCat.value, data.hobbyId);
+            //hobbies.value = data.hobbyId;
+        }
+    });
+
+}
+
+
+function TogglePostMenu(id) {
+
+    let postMenu = $("#postMenu" + id);
+    postMenu.toggle();
+
+
+}
+
+function DeletePost(id) {
+    if (id == 0 || id == null)
+        return;
+
+    let url = '/Feed/DeletePost/' + id;
+    if (confirm('Are you sure to delete this post?') == true) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            success: function (res) {
+                if (res.id != undefined) {
+                    RemovePostFromUI(res.id);
+                }
+            }
+        });
+    }
+}
+
+function RemovePostFromUI(id) {
+    let post = $("#post" + id);
+    post.remove();
+}
+
+function cancelAppointment(appointmentId) {
+    if (appointmentId == 0 || appointmentId == null)
+        return;
+
+    let url = '/Appointment/CancelAppointment';
+    if (confirm('Are you sure you want to cancel this appointment?') == true) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { appointmentId },
+            success: function (res) {
+                if (res.success) {
+                    alert('Appointment cancelled successfully.');
+                    $('#appointmentDetailsModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert('❌ Failed to cancel appointment.');
+                }
+            },
+            error: function () {
+                alert('❌ Error cancelling appointment.');
+            }
+        });
+    }
+}
+
+function acceptAppointment(appointmentId) {
+    if (appointmentId == 0 || appointmentId == null)
+        return;
+
+    const professionalFeeInput = document.getElementById('professionalFeeInput');
+    let professionalFee = 0;
+
+    // If the fee input exists, ensure it’s filled
+    if (professionalFeeInput) {
+        professionalFee = parseFloat(professionalFeeInput.value);
+        if (isNaN(professionalFee) || professionalFee <= 0) {
+            alert('⚠️ Please enter a valid professional fee before accepting.');
+            professionalFeeInput.focus();
+            return;
+        }
+    }
+
+    let url = '/Appointment/AcceptAppointment';
+    if (confirm('Do you want to accept this appointment?') == true) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                AppointmentID: appointmentId,
+                ProfessionalFee: professionalFee
+            },
+            success: function (res) {
+                if (res.success) {
+                    alert('Appointment accepted successfully.');
+                    $('#appointmentDetailsModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert('❌ Failed to accept appointment.');
+                }
+            },
+            error: function () {
+                alert('❌ Error accepting appointment.');
+            }
+        });
+    }
+}
+
+function markAsPaid(appointmentId, paymentMethod) {
+    if (appointmentId == 0 || appointmentId == null)
+        return;
+
+    if (!paymentMethod || paymentMethod.trim() === "") {
+        alert('Please select payment method');
+        return;
+    }
+
+    let url = '/Appointment/MarkAsPaid';
+    if (confirm('Are you sure you want to mark this appointment as paid?') == true) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                AppointmentID: appointmentId,
+                PaymentMethod: paymentMethod
+            },
+            success: function (res) {
+                if (res.success) {
+                    alert('Marked as paid successfully.');
+                    $('#appointmentDetailsModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert('❌ Failed to update payment status.');
+                }
+            },
+            error: function () {
+                alert('❌ Error marking as paid.');
+            }
+        });
+    }
+}
+
+function completeAppointment(appointmentId) {
+    if (appointmentId == 0 || appointmentId == null)
+        return;
+
+    let url = '/Appointment/CompleteAppointment';
+    if (confirm('Are you sure you want to mark this appointment as completed?') == true) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { appointmentId },
+            success: function (res) {
+                if (res.success) {
+                    alert('Appointment completed successfully.');
+                    $('#appointmentDetailsModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert('❌ Failed to complete appointment.');
+                }
+            },
+            error: function () {
+                alert('❌ Error completing appointment.');
+            }
+        });
+    }
+}
+
+
