@@ -260,7 +260,7 @@ namespace FriendlyRS1.Controllers
 
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("name", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
