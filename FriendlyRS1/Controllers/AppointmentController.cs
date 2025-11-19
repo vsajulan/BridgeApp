@@ -148,7 +148,8 @@ namespace FriendlyRS1.Controllers
                 AppointmentId = appointment.Id,
                 TransactionId = unitOfWork.AppointmentPayment.GenerateTransactionId("PAY"),
                 ProfessionalFee = accept.ProfessionalFee, 
-                ServiceFee = 75,      
+                PlatformFee = 75,      
+                ServiceFeeRate = 5, //5%
                 PaymentMethod = "",
                 PaymentStatus = PaymentStatus.Pending,
                 CreatedAt = DateTime.UtcNow
@@ -254,6 +255,7 @@ namespace FriendlyRS1.Controllers
 
         public async Task<IActionResult> MarkAsPaid(MarkAsPaidAppointmentVM paid)
         {
+            int AdminId = 30;
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Unauthorized();
 
@@ -282,11 +284,32 @@ namespace FriendlyRS1.Controllers
             };
 
             unitOfWork.BellNotification.Add(notification);
+
+            // Notify Admin
+            BellNotification notificationAdmin = new BellNotification
+            {
+                ActorId = currentUser.Id,
+                NotificationTypeId = (int)EnumNotificationType.AppointmentPaid,
+                NotifierId = AdminId,
+                DateCreated = DateTime.Now,
+                RedirectAction = "",
+                RedirectController = "Transaction",
+                RedirectParam = ""
+            };
+
+            unitOfWork.BellNotification.Add(notificationAdmin);
+
             unitOfWork.Complete();
 
             await SendAppointmentNotification(
                 appointment.StartTime.ToString("yyyy-MM-dd"),
                 notification.NotifierId,
+                "has completed payment for the appointment."
+            );
+
+            await SendAppointmentNotification(
+                appointment.StartTime.ToString("yyyy-MM-dd"),
+                AdminId,
                 "has completed payment for the appointment."
             );
 
@@ -340,7 +363,8 @@ namespace FriendlyRS1.Controllers
                     Id = appointment.Payment.Id,
                     TransactionId = appointment.Payment.TransactionId,
                     ProfessionalFee = appointment.Payment.ProfessionalFee,
-                    ServiceFee = appointment.Payment.ServiceFee,
+                    PlatformFee = appointment.Payment.PlatformFee,
+                    ServiceFeeRate = appointment.Payment.ServiceFeeRate,
                     PaymentMethod = appointment.Payment.PaymentMethod,
                     Status = appointment.Payment.PaymentStatus,
                     PaidAt = appointment.Payment.PaidAt

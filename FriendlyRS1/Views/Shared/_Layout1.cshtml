@@ -421,15 +421,20 @@
 
     function LogOut() {
         if (confirm('Want to Log out, are you sure?')) {
-            let url = 'Account/LogOut/';
+            let url = '@Url.Action("LogOut", "Account")'; // Razor generates correct absolute URL
 
             $.ajax({
                 url: url,
+                type: 'POST', 
                 success: function () {
                     window.location.assign("/Home/Index");
+                },
+                error: function () {
+                    alert("Logout failed!");
                 }
-            })
+            });
         }
     }
+
 
 </script>

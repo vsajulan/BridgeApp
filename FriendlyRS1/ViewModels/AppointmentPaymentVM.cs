@@ -10,9 +10,14 @@ namespace FriendlyRS1.ViewModels
         public string? TransactionId { get; set; }
 
         public decimal ProfessionalFee { get; set; }
-        public decimal ServiceFee { get; set; }
+        public decimal PlatformFee { get; set; }
+        public decimal ServiceFeeRate { get; set; }
 
-        public decimal TotalAmount => ProfessionalFee + ServiceFee;
+        public decimal ServiceFee => Math.Round(ProfessionalFee * (ServiceFeeRate / 100), 2);
+
+        public decimal TotalAmount => ProfessionalFee + PlatformFee;
+
+        public decimal ProfessionalNet => Math.Round(ProfessionalFee - ServiceFee, 2);
 
         public string? PaymentMethod { get; set; }
         public PaymentStatus? Status { get; set; }

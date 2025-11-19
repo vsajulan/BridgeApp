@@ -156,6 +156,10 @@
     }
 </div>
 
+<div id="notifications" class="notification"></div>
+
+<input type="hidden" id="signalRConnectionId" />
+
 <div id="appointmentDetailsModalContainer"></div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -182,3 +186,10 @@
         });
     });
 </script>
+
+<script>
+    var userId = @ViewBag.UserId;
+</script>
+
+<script src="~/lib/microsoft-signalr/signalr.js"></script>
+<script src="~/js/usernotification.js"></script>

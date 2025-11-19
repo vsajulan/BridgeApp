@@ -85,6 +85,8 @@ namespace FriendlyRS1.Controllers
 
             var pager = new Pager(totalCount, page, pageSize);
 
+            var loggedUser = await _userManager.GetUserAsync(User);
+            ViewBag.UserId = loggedUser.Id;
             ViewBag.Pager = pager;
             ViewBag.Search = search;
             ViewBag.StartDate = startDate.Value.ToString("yyyy-MM-dd");
@@ -119,7 +121,8 @@ namespace FriendlyRS1.Controllers
                     Id = appointment.Payment.Id,
                     TransactionId = appointment.Payment.TransactionId,
                     ProfessionalFee = appointment.Payment.ProfessionalFee,
-                    ServiceFee = appointment.Payment.ServiceFee,
+                    PlatformFee = appointment.Payment.PlatformFee,
+                    ServiceFeeRate = appointment.Payment.ServiceFeeRate,
                     PaymentMethod = appointment.Payment.PaymentMethod,
                     Status = appointment.Payment.PaymentStatus,
                     PaidAt = appointment.Payment.PaidAt

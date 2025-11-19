@@ -40,10 +40,22 @@
                                     <span>@Model.PaymentDetails.PaymentMethod</span>
                                 </div>
                             </div>
+
                             <div class="row mb-2">
                                 <div class="col-sm-6">
-                                    <strong>Service Fee:</strong>
-                                    <span class="text-dark">@Model.PaymentDetails.ServiceFee.ToString("N2")</span>
+                                    <strong>Service Rate:</strong>
+                                    <span class="text-dark">@Model.PaymentDetails.ServiceFeeRate.ToString("N2")%</span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Platform Fee:</strong>
+                                    <span class="text-dark">@Model.PaymentDetails.PlatformFee.ToString("N2")</span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-sm-6">
+                                    <strong>Professional Net:</strong>
+                                    <span class="fw-bold text-primary">@Model.PaymentDetails.ProfessionalNet.ToString("N2")</span>
                                 </div>
                                 <div class="col-sm-6">
                                     <strong>Status:</strong>
@@ -57,20 +69,15 @@
                                     }
                                 </div>
                             </div>
+
                             <div class="row mb-2">
                                 <div class="col-sm-6">
-                                    @if (Model.PaymentDetails != null)
-                                    {
-                                        <strong>Total Amount:</strong>
-                                        <span class="fw-bold text-success">@Model.PaymentDetails.TotalAmount.ToString("N2")</span>
-                                    }
+                                    <strong>Total Pay:</strong>
+                                    <span class="fw-bold text-success">@Model.PaymentDetails.TotalAmount.ToString("N2")</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    @if (Model.PaymentDetails != null)
-                                    {
-                                        <strong>Paid At:</strong>
-                                        <span>@Model.PaymentDetails.PaidAt?.ToString("f")</span>
-                                    }
+                                    <strong>Paid At:</strong>
+                                    <span>@Model.PaymentDetails.PaidAt?.ToString("f")</span>
                                 </div>
                             </div>
                         </div>

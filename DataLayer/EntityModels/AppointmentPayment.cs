@@ -23,11 +23,15 @@ namespace DataLayer.EntityModels
         public decimal ProfessionalFee { get; set; } 
 
         [Required]
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal ServiceFeeRate { get; set; }
+
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal ServiceFee { get; set; }
+        public decimal PlatformFee { get; set; }
 
         [NotMapped]
-        public decimal TotalAmount => ProfessionalFee + ServiceFee;
+        public decimal TotalAmount => ProfessionalFee + ServiceFeeRate;
 
         [StringLength(50)]
         public string? PaymentMethod { get; set; } 
