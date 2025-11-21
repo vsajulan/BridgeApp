@@ -149,7 +149,7 @@ namespace FriendlyRS1.Controllers
                 TransactionId = unitOfWork.AppointmentPayment.GenerateTransactionId("PAY"),
                 ProfessionalFee = accept.ProfessionalFee, 
                 PlatformFee = 75,      
-                ServiceFeeRate = 5, //5%
+                ServiceFeeRate = 15, //15%
                 PaymentMethod = "",
                 PaymentStatus = PaymentStatus.Pending,
                 CreatedAt = DateTime.UtcNow
