@@ -71,20 +71,20 @@
                 </div>
                 <hr style="width:100%;" />
                 <div class="form-group">
-                    <textarea name="PostText" id="PostText" class="form-control addPostInput" placeholder="e.g. Someone willing to play soccer this wednesday?" required></textarea>
+                    <textarea name="PostText" id="PostText" class="form-control addPostInput" placeholder="e.g. Looking for financial help?" required></textarea>
                 </div>
 
                 <div class="form-group text-dark">
-                    <label>Your interests or hobby category:</label>
+                    <label>Your category:</label>
                     <select class="form-control" asp-items="Model.HobbyCategories" onchange="LoadHobbies(this.value)" id="hobbiesCat">
                         <option value="" selected disabled hidden>Choose category</option>
                     </select>
                 </div>
 
                 <div class="form-group text-dark">
-                    <label>Your hobby or interest:</label>
+                    <label>Your topic:</label>
                     <select name="HobbyId" class="form-control" id="hobbies">
-                        <option value="">Choose hobby</option>
+                        <option value="">Choose topic</option>
                     </select>
                 </div>
 
