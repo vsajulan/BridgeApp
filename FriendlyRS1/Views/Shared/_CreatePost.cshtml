@@ -51,7 +51,7 @@
         }
         <div class="px-3 w-100" data-toggle="modal" data-target="#exampleModal">
             <p class="form-control rounded m-0 create-post-text">What's your next activity?</p>
-            <small class="text-info" style="font-weight:500">e.g. Someone interested in hiking this weekend?</small>
+            <small class="text-info" style="font-weight:500">e.g. Looking for financial help?</small>
         </div>
     </div>
 </div>
@@ -106,7 +106,6 @@
                 <span id="textMsg" style="color:red"></span>
 
                 <div id="info">
-
                 </div>
                 <hr style="width: 100%" />
 
@@ -156,7 +155,7 @@
         while (select.hasChildNodes()) {
             select.removeChild(select.childNodes[0]);
         }
-        addOption('Choose hobby', '');
+        addOption('Choose topic', '');
     }
 
     function addOption(text, value, hobbyId) {
@@ -254,9 +253,9 @@
     function addAlert(text, alertType) {
 
         var alert = `<div class="alert alert-${alertType} alert-dismissible fade show m-0" id="alert-warning">
-                   <span>${text}</span>
-                    <button class="close" data-dismiss="alert">×</button>
-                </div>`;
+                       <span>${text}</span>
+                        <button class="close" data-dismiss="alert">×</button>
+                    </div>`;
 
         return alert;
     }
